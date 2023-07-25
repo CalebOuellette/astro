@@ -14,6 +14,11 @@ import { createDefaultDevConfig } from './config.js';
 import { AstroTimer } from './timer.js';
 import { loadTSConfig } from './tsconfig.js';
 
+const storyConfig = {
+	pageExtensions: ['.story.astro'],
+	pageDirectory: './src', // './pages',
+};
+
 export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): AstroSettings {
 	const { contentDir } = getContentPaths(config);
 	return {
@@ -27,6 +32,7 @@ export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): 
 				? [{ pattern: '/_image', entryPoint: 'astro/assets/image-endpoint', prerender: false }]
 				: [],
 		pageExtensions: ['.astro', '.html', ...SUPPORTED_MARKDOWN_FILE_EXTENSIONS],
+		pageDirectory: './pages',
 		contentEntryTypes: [markdownContentEntryType],
 		dataEntryTypes: [
 			{

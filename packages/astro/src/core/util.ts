@@ -103,12 +103,12 @@ export function unwrapId(id: string): string {
 		: id;
 }
 
-export function resolvePages(config: AstroConfig) {
-	return new URL('./pages', config.srcDir);
+export function resolvePages(settings: AstroSettings) {
+	return new URL(settings.pageDirectory, settings.config.srcDir);
 }
 
-function isInPagesDir(file: URL, config: AstroConfig): boolean {
-	const pagesDir = resolvePages(config);
+function isInPagesDir(file: URL, settings: AstroSettings): boolean {
+	const pagesDir = resolvePages(settings);
 	return file.toString().startsWith(pagesDir.toString());
 }
 
@@ -119,7 +119,7 @@ function isInjectedRoute(file: URL, settings: AstroSettings) {
 	return false;
 }
 
-function isPublicRoute(file: URL, config: AstroConfig): boolean {
+function isPublicRoute(file: URL, config: AstroSettings): boolean {
 	const pagesDir = resolvePages(config);
 	const parts = file.toString().replace(pagesDir.toString(), '').split('/').slice(1);
 	for (const part of parts) {
@@ -136,14 +136,14 @@ function endsWithPageExt(file: URL, settings: AstroSettings): boolean {
 }
 
 export function isPage(file: URL, settings: AstroSettings): boolean {
-	if (!isInPagesDir(file, settings.config) && !isInjectedRoute(file, settings)) return false;
-	if (!isPublicRoute(file, settings.config)) return false;
+	if (!isInPagesDir(file, settings) && !isInjectedRoute(file, settings)) return false;
+	if (!isPublicRoute(file, settings)) return false;
 	return endsWithPageExt(file, settings);
 }
 
 export function isEndpoint(file: URL, settings: AstroSettings): boolean {
-	if (!isInPagesDir(file, settings.config)) return false;
-	if (!isPublicRoute(file, settings.config)) return false;
+	if (!isInPagesDir(file, settings)) return false;
+	if (!isPublicRoute(file, settings)) return false;
 	return !endsWithPageExt(file, settings);
 }
 

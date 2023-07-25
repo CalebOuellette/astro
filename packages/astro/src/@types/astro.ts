@@ -1404,6 +1404,7 @@ export interface AstroSettings {
 	adapter: AstroAdapter | undefined;
 	injectedRoutes: InjectedRoute[];
 	pageExtensions: string[];
+	pageDirectory: string;
 	contentEntryTypes: ContentEntryType[];
 	dataEntryTypes: DataEntryType[];
 	renderers: AstroRenderer[];
