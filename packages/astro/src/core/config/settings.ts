@@ -16,7 +16,12 @@ import { loadTSConfig } from './tsconfig.js';
 
 const storyConfig = {
 	pageExtensions: ['.story.astro'],
-	pageDirectory: './src', // './pages',
+	pageDirectory: './',
+};
+
+const defaultConfig = {
+	pageExtensions: ['.astro', '.html', ...SUPPORTED_MARKDOWN_FILE_EXTENSIONS],
+	pageDirectory: './pages',
 };
 
 export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): AstroSettings {
@@ -31,8 +36,7 @@ export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): 
 			config.experimental.assets && (isServerLikeOutput(config) || mode === 'dev')
 				? [{ pattern: '/_image', entryPoint: 'astro/assets/image-endpoint', prerender: false }]
 				: [],
-		pageExtensions: ['.astro', '.html', ...SUPPORTED_MARKDOWN_FILE_EXTENSIONS],
-		pageDirectory: './pages',
+		...storyConfig,
 		contentEntryTypes: [markdownContentEntryType],
 		dataEntryTypes: [
 			{
