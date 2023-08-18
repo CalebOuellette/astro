@@ -8,7 +8,7 @@ export function defineConfig(config: AstroUserConfig) {
 
 export function getViteConfig(inlineConfig: UserConfig) {
 	// Return an async Vite config getter which exposes a resolved `mode` and `command`
-	return async ({ mode, command }: { mode: string; command: 'serve' | 'build' }) => {
+	return async ({ mode, command }: { mode: string; command: 'serve' | 'build' | 'story' }) => {
 		// Vite `command` is `serve | build`, but Astro uses `dev | build`
 		const cmd = command === 'serve' ? 'dev' : command;
 

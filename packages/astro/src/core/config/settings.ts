@@ -24,7 +24,10 @@ const defaultConfig = {
 	pageDirectory: './pages',
 };
 
-export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): AstroSettings {
+export function createBaseSettings(
+	config: AstroConfig,
+	mode: 'build' | 'dev' | 'story'
+): AstroSettings {
 	const { contentDir } = getContentPaths(config);
 	return {
 		config,
@@ -36,7 +39,7 @@ export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): 
 			config.experimental.assets && (isServerLikeOutput(config) || mode === 'dev')
 				? [{ pattern: '/_image', entryPoint: 'astro/assets/image-endpoint', prerender: false }]
 				: [],
-		...storyConfig,
+		...(mode === 'story' ? storyConfig : defaultConfig),
 		contentEntryTypes: [markdownContentEntryType],
 		dataEntryTypes: [
 			{
@@ -120,7 +123,7 @@ export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): 
 
 export function createSettings(
 	config: AstroConfig,
-	mode: 'build' | 'dev',
+	mode: 'build' | 'dev' | 'story',
 	cwd?: string
 ): AstroSettings {
 	const tsconfig = loadTSConfig(cwd);

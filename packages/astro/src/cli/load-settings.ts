@@ -27,7 +27,7 @@ export async function loadSettings({ cmd, flags, logging }: LoadSettingsOptions)
 		return {} as any;
 	});
 
-	const mode = cmd === 'build' ? 'build' : 'dev';
+	const mode = cmd === 'build' || cmd === 'story' ? cmd : 'dev';
 	if (!initialAstroConfig) return;
 	telemetry.record(event.eventCliSession(cmd, initialUserConfig, flags));
 	return createSettings(initialAstroConfig, mode, root);
