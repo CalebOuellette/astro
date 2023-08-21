@@ -1404,6 +1404,7 @@ export interface AstroSettings {
 	adapter: AstroAdapter | undefined;
 	injectedRoutes: InjectedRoute[];
 	pageExtensions: string[];
+	pageDirectory: string;
 	contentEntryTypes: ContentEntryType[];
 	dataEntryTypes: DataEntryType[];
 	renderers: AstroRenderer[];
@@ -1858,7 +1859,7 @@ export interface AstroIntegration {
 	hooks: {
 		'astro:config:setup'?: (options: {
 			config: AstroConfig;
-			command: 'dev' | 'build' | 'preview';
+			command: 'dev' | 'build' | 'preview' | 'story';
 			isRestart: boolean;
 			updateConfig: (newConfig: Record<string, any>) => void;
 			addRenderer: (renderer: AstroRenderer) => void;

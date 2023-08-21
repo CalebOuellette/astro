@@ -14,7 +14,20 @@ import { createDefaultDevConfig } from './config.js';
 import { AstroTimer } from './timer.js';
 import { loadTSConfig } from './tsconfig.js';
 
-export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): AstroSettings {
+const storyConfig = {
+	pageExtensions: ['.story.astro'],
+	pageDirectory: './',
+};
+
+const defaultConfig = {
+	pageExtensions: ['.astro', '.html', ...SUPPORTED_MARKDOWN_FILE_EXTENSIONS],
+	pageDirectory: './pages',
+};
+
+export function createBaseSettings(
+	config: AstroConfig,
+	mode: 'build' | 'dev' | 'story'
+): AstroSettings {
 	const { contentDir } = getContentPaths(config);
 	return {
 		config,
@@ -26,7 +39,7 @@ export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): 
 			config.experimental.assets && (isServerLikeOutput(config) || mode === 'dev')
 				? [{ pattern: '/_image', entryPoint: 'astro/assets/image-endpoint', prerender: false }]
 				: [],
-		pageExtensions: ['.astro', '.html', ...SUPPORTED_MARKDOWN_FILE_EXTENSIONS],
+		...(mode === 'story' ? storyConfig : defaultConfig),
 		contentEntryTypes: [markdownContentEntryType],
 		dataEntryTypes: [
 			{
@@ -110,7 +123,7 @@ export function createBaseSettings(config: AstroConfig, mode: 'build' | 'dev'): 
 
 export function createSettings(
 	config: AstroConfig,
-	mode: 'build' | 'dev',
+	mode: 'build' | 'dev' | 'story',
 	cwd?: string
 ): AstroSettings {
 	const tsconfig = loadTSConfig(cwd);

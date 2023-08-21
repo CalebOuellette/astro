@@ -10,6 +10,7 @@ type CLICommand =
 	| 'add'
 	| 'docs'
 	| 'dev'
+	| 'story'
 	| 'build'
 	| 'preview'
 	| 'sync'
@@ -30,6 +31,7 @@ async function printAstroHelp() {
 				['build', 'Build your project and write it to disk.'],
 				['check', 'Check your project for errors.'],
 				['dev', 'Start the development server.'],
+				['story', 'Start the story server.'],
 				['docs', 'Open documentation in your web browser.'],
 				['info', 'List info about your current Astro setup.'],
 				['preview', 'Preview your build locally.'],
@@ -66,6 +68,7 @@ function resolveCommand(flags: yargs.Arguments): CLICommand {
 		'sync',
 		'telemetry',
 		'dev',
+		'story',
 		'build',
 		'preview',
 		'check',
@@ -141,6 +144,14 @@ async function runCommand(cmd: string, flags: yargs.Arguments) {
 		case 'dev': {
 			const { dev } = await import('./dev/index.js');
 			const server = await dev({ flags, logging });
+			if (server) {
+				return await new Promise(() => {}); // lives forever
+			}
+			return;
+		}
+		case 'story': {
+			const { story } = await import('./story/index.js');
+			const server = await story({ flags, logging });
 			if (server) {
 				return await new Promise(() => {}); // lives forever
 			}

@@ -213,6 +213,17 @@ export interface CreateRouteManifestParams {
 	fsMod?: typeof nodeFs;
 }
 
+/** Temp function to working around double period endings like ".story.astro" */
+function hasEnding(fileName: string, endings: Set<string>): string {
+	// don't feel great about this but it works.
+	for (const ending of endings) {
+		if (fileName.endsWith(ending)) {
+			return ending;
+		}
+	}
+	return '';
+}
+
 /** Create manifest of all static routes */
 export function createRouteManifest(
 	{ settings, cwd, fsMod }: CreateRouteManifestParams,
@@ -220,11 +231,7 @@ export function createRouteManifest(
 ): ManifestData {
 	const components: string[] = [];
 	const routes: RouteData[] = [];
-	const validPageExtensions = new Set<string>([
-		'.astro',
-		...SUPPORTED_MARKDOWN_FILE_EXTENSIONS,
-		...settings.pageExtensions,
-	]);
+	const validPageExtensions = new Set<string>([...settings.pageExtensions]);
 	const validEndpointExtensions = new Set<string>(['.js', '.ts']);
 	const localFs = fsMod ?? nodeFs;
 	const prerender = getPrerenderDefault(settings.config);
@@ -243,7 +250,7 @@ export function createRouteManifest(
 			const file = slash(path.relative(cwd || fileURLToPath(settings.config.root), resolved));
 			const isDir = fs.statSync(resolved).isDirectory();
 
-			const ext = path.extname(basename);
+			const ext = hasEnding(basename, validPageExtensions);
 			const name = ext ? basename.slice(0, -ext.length) : basename;
 
 			if (name[0] === '_') {
@@ -347,7 +354,7 @@ export function createRouteManifest(
 	}
 
 	const { config } = settings;
-	const pages = resolvePages(config);
+	const pages = resolvePages(settings);
 
 	if (localFs.existsSync(pages)) {
 		walk(localFs, fileURLToPath(pages), [], []);

@@ -45,7 +45,7 @@ export async function runHookConfigSetup({
 	isRestart = false,
 }: {
 	settings: AstroSettings;
-	command: 'dev' | 'build' | 'preview';
+	command: 'dev' | 'build' | 'preview' | 'story';
 	logging: LogOptions;
 	isRestart?: boolean;
 }): Promise<AstroSettings> {
